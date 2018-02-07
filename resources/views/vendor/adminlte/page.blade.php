@@ -236,13 +236,13 @@
 @section('adminlte_js')
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     <!--<script src="{{ asset('vendor/adminlte/dist/js/bootstrap-timepicker.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/jquery.inputmask.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/jquery.inputmask.date.extensions.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/jquery.inputmask.extensions.js') }}"></script>-->
     <script src="{{ asset('vendor/adminlte/dist/js/moment.min.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/app.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/select2.full.min.js') }}"></script>
 
     @stack('js')
     @yield('js')

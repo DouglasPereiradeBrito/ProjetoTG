@@ -33,5 +33,5 @@ $(document).ready(function () {
             $('#atualizado').val(start.format('YYYY-M-DD') + ' - ' + end.format('YYYY-M-DD'));
         });
 
-    
+    $('.select2').select2();    
 })

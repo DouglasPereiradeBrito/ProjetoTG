@@ -186,6 +186,29 @@ return [
                 ]
             ]
         ],
+        [   
+            'text'      => 'Tag',
+            'icon'      => 'file',
+            'submenu'   => [
+                [
+                    'text'  => 'Cadastrar',
+                    'url'   => 'tag/cadastrar'
+                ],
+                [
+                    'text'  => 'Listar'
+                ]
+            ]
+        ],
+        [
+            'text'      => 'Historico',
+            'icon'      => 'file',
+            'submenu'   => [
+                [
+                    'text'  => 'Listar',
+                    'url'   => 'historico/listar'
+                ]
+            ]
+        ],
         'ACCOUNT SETTINGS',
         [
             'text' => 'SAve',

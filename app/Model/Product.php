@@ -31,15 +31,16 @@ class Product extends Model{
         return $this->belongsTo(Category::class);
     }
 
-    public function registerChange($value){
-        //dd($value->all());
-        if($value->id){
-            $obj = $before = Product::find($value->id);
+    public function registerChange($value, $before){
+        //dd($beforet);
+        if(isset($value->id)){
+            $obj = Product::find($value->id);
             $registerChange = $obj->update($value->all());
             $after = Product::find($value->id);
+            //dd($before, $after);
         }else{
             $after = Product::create($value->all());
-            $registerChange = $before = Product::find($value->id);
+            $registerChange = $before = $after;
         }
 
         $historic = HistoricProduct::create([

@@ -105,6 +105,23 @@ Route::middleware(['auth'])->group(function(){
         })->name('produto.show');
     });
 });
+
+Route::middleware(['auth'])->group(function(){
+    Route::prefix('historico')->group(function(){
+        Route::get('listar', 'HistoricProductController@showL')->name('historico.list');
+        Route::get('pesquisar', 'HistoricProductController@search')->name('historico.search');
+        Route::get('visualizar/{id}', 'HistoricProductController@showCA', function($id){
+            return $id;
+        })->name('historico.show');
+    });
+});
+
+Route::middleware(['auth'])->group(function(){
+    Route::prefix('tag')->group(function(){
+        Route::get('cadastrar', 'TagController@showCA')->name('tag.register');
+    });
+});
+
 //Route::get('/', function () {
 //    return view('welcome');
 //});

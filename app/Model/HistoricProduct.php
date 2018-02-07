@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class HistoricProduct extends Model{
     
@@ -23,4 +24,7 @@ class HistoricProduct extends Model{
         'session_after_description'
     ];
 
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
