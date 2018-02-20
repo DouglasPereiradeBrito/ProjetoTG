@@ -56,6 +56,6 @@
 @endif
 
 @yield('adminlte_js')
-
+    
 </body>
 </html>

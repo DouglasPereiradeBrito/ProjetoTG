@@ -18,10 +18,11 @@
             <div class="box-body">
                 <div class="form-group">
                     <button type="submit" class="btn {{ isset($models->id) ? 'btn-warning' : 'btn-success' }} "><span class='glyphicon {{ isset($models->id) ? 'glyphicon-refresh' : 'glyphicon-ok glyphicon' }}'></span>{{ isset($models->id) ? ' Alterar' : ' Cadastrar' }}</button>
+                    <button type="submit" class="btn {{ isset($models->id) ? 'btn-warning' : 'btn-success' }} "><span class='glyphicon {{ isset($models->id) ? 'glyphicon-refresh' : 'glyphicon-ok glyphicon' }}'></span> Concluir</button>
                     <a href='{{ route("$route.delete", isset($models->id) ? $models->id : '') }}' class="btn btn-danger {{ isset($models->id) ? '' : 'hidden' }}"><span class='glyphicon glyphicon-remove'></span> Excluir</a>
                 </div>
                 @foreach($forms as $key => $form)
-                    @if($key == "session" || $key == 'brand' || $key == 'gondola' || $key == 'category')
+                    @if($key == 'product')
                         <div class="form-group col-sm-12 col-md-6">
                             <label>{{ $forms[$key][0] }}</label>
                             <select class="form-control select2 select2-hidden-accessible" name="{{ $key.'_id' }}" style="width: 100%;" tabindex="-1" aria-hidden="true">
@@ -37,8 +38,11 @@
                         </div> 
                     @endif
                 @endforeach      
+                <div class="col-sm-12 col-md-6 form-group">
+                    <label>Tags Cadastradas</label>
+                    <textarea class="form-control" rows="3" placeholder="Enter ..." disabled=""></textarea>
+                </div>
                 {!! csrf_field() !!}
-                {{session(['toggle' => false])}}
             </div>
         </form>
         <!--<form role="form" method='POST' action='{{ route("$route.create")}}'>

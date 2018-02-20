@@ -6,7 +6,7 @@
     </li>
     @for($i = 1; $i <= count(Request::segments()); $i++)
         <li>
-            <a href="">{{Request::segment($i)}}</a>
+            <a href="">{{ ucfirst (Request::segment($i)) }}</a>
             @if($i < count(Request::segments()) & $i > 0)
                 {!!'<i class="fa fa-angle-right"></i>'!!}
             @endif

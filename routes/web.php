@@ -119,6 +119,8 @@ Route::middleware(['auth'])->group(function(){
 Route::middleware(['auth'])->group(function(){
     Route::prefix('tag')->group(function(){
         Route::get('cadastrar', 'TagController@showCA')->name('tag.register');
+        Route::post('create', 'TagController@create')->name('tag.create');
+        Route::get('delete', 'TagController@delete')->name('tag.delete');
     });
 });
 

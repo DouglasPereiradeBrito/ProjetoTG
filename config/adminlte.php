@@ -115,8 +115,22 @@ return [
             'can'  => 'manage-blog',
         ],
         [
+            'text'      => 'Funcionario',
+            'icon'      => 'user',
+            'submenu'   => [
+                [
+                    'text'  => 'Cadastrar',
+                    'url'   => 'funcionario/cadastrar'
+                ],
+                [
+                    'text'  => 'Listar',
+                    'url'   => 'funcionario/listar' 
+                ]
+            ]    
+        ],
+        [
             'text'        => 'Marca',
-            'icon'        => 'file',
+            'icon'        => '',
             'label'       => 4,
             'label_color' => 'success',
             'submenu' => [
@@ -177,7 +191,7 @@ return [
             'icon'      => 'file',
             'submenu'   => [
                 [
-                    'text'  => 'Cadastrar'                    ,
+                    'text'  => 'Cadastrar',
                     'url'   => 'produto/cadastrar'
                 ],
                 [   
