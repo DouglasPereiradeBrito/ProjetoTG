@@ -10,8 +10,8 @@ class ProductTableSeeder extends Seeder{
      * @return void
      */
     public function run(){
-        Product::create([
+        /*Product::create([
             'description'   => ''
-        ]);
+        ]);*/
     }
 }

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'AdminLTE')
+@section('title', 'PrateleiraDigital')
 
 @section('content_header')
     <h1>{{ $title }}</h1>    
@@ -111,7 +111,7 @@
             <div class="box-body">
               <table class="table">
                 <thead>
-                  @if($title === 'Historico')
+                  @if($title === 'Histórico')
                     <tr>
                       @foreach($tables as $key => $table)
                         <th colspan='{{ $table }}' class='text-center'>{{ $key }}</th>
@@ -122,7 +122,7 @@
                       <th class='text-center'>{{ $table }}</th>
                     @endforeach
                   @endif
-                  @if($title === 'Historico')
+                  @if($title === 'Histórico')
                     <tr>
                       <th colspan='' class='text-center'>ID</th>
                       <th colspan='' class='text-center'>Ação feita por</th>
@@ -147,7 +147,7 @@
                         <td>{{ $model->category->description }}</td>
                         <td>{{ $model->gondola->description }}</td>
                         <td>R$ {{ $model->price }}</td>
-                      @elseif($title === 'Historico')
+                      @elseif($title === 'Histórico')
                         <td>{{ $model->user->name }}</td>
                         <td>{{ $model->product_before_description }}</td>
                         <td>{{ $model->product_after_description }}</td>
@@ -161,11 +161,22 @@
                         <td>{{ $model->category_after_description }}</td>
                         <td>{{ $model->session_before_description }}</td>
                         <td>{{ $model->session_after_description }}</td> 
+                      @elseif($route === 'usuario')
+                        <td>{{ $model->name }}</td>
+                        <td>{{ $model->cpf }}</td>
+                        <td>{{ $model->fone }}</td>
+                        <td>{{ $model->email }}</td>
                       @endif
                       <td>{{ $model->created_at }}</td>
-                      @if($title !== 'Historico')
+                      @if($title !== 'Histórico')
                         <td>{{ $model->updated_at }}</td>
-                        <td><a href='{{ route($route.'.show', $model->id) }}' class='btn btn-info'><span class='glyphicon glyphicon-eye-open'></span> Visualizar</a></td>
+                        @can('SCA')
+                          <td>
+                            <a href='{{ route($route.'.show', $model->id) }}' class="btn btn-app bg-teal">
+                              <i class="glyphicon glyphicon-eye-open"></i> Visualizar
+                            </a>
+                          </td>
+                        @endcan
                       @endif
                     </tr>
                   @endforeach
@@ -180,24 +191,5 @@
           </div>
         </div>
       </div> 
-    </div>  
-    <!--data-toggle="modal" data-target="#modal-danger"<div class="modal modal-danger fade" id="modal-danger" style="display: none;">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-              <h4 class="modal-title">Exluir</h4>
-            </div>
-            <div class="modal-body">
-              <p>Deseja realmente exluir este item ?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Não</button>
-              <a href=' route('marca.delete', $brand->id) ' class="btn btn-outline">Sim</a>
-            </div>
-          </div>
-        </div>
-    </div>-->
-     
+    </div>       
 @stop

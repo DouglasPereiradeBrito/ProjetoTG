@@ -12,10 +12,16 @@ use App\Model\HistoricProduct;
 
 class ProductController extends Controller{
 
+    private $products;
+
+    public function __construct(){
+        $this->products = new Product();
+    }
+
     public function showCA($id = null){
         $title = 'Produto';
         $route = 'produto';
-        $forms = ['id' => 'ID', 'description' => 'Descrição', 'brand' => ['Marca', Brand::all()], 'category' => ['Categoria', Category::all()], 'session' => ['Sessão', Session::all()], 'gondola' => ['Gôndola', Gondola::all()], 'price' => 'Preço'];
+        $forms = ['id' => 'ID', 'description' => 'Nome', 'price' => 'Preço', 'brand' => ['Marca', Brand::all()], 'category' => ['Categoria', Category::all()], 'session' => ['Sessão', Session::all()], 'gondola' => ['Gôndola', Gondola::all()]];
 
         if($id)
             $models = Product::with('brand', 'session', 'category', 'gondola')->find($id);
@@ -24,6 +30,7 @@ class ProductController extends Controller{
     }
 
     public function create(Request $request, Product $product){
+        $this->validate($request, $this->products->rules, $this->products->messages);
         if($product->registerChange($request, isset($request->id) ? Product::find($request->id) : null))
             return redirect()->route('produto.list')->with('success', 'Produto Cadastrado com Sucesso.');
         else    
@@ -33,7 +40,7 @@ class ProductController extends Controller{
     public function showL(){
         $title = 'Produto';
         $route = 'produto';
-        $tables = ['ID', 'Descrição', 'Marca', 'Sessão', 'Categoria', 'Gôndola', 'Preço', 'Criado', 'Atualizado', 'Ação'];
+        $tables = ['ID', 'Nome', 'Marca', 'Sessão', 'Categoria', 'Gôndola', 'Preço', 'Criado', 'Atualizado', auth()->user()->can('SCA') ? 'Ação' : ''];
 
         $models = Product::orderBy('id', 'asc')->with('brand', 'session', 'category', 'gondola')->paginate(5);
  
@@ -41,6 +48,7 @@ class ProductController extends Controller{
     }
 
     public function edit(Request $request, Product $product){
+        $this->validate($request, $this->products->rules, $this->products->messages);
         if($product->registerChange($request, isset($request->id) ? Product::find($request->id) : null))
             return redirect()->route('produto.list')->with('success', 'Produto Alterado com Sucesso.');
         else    
@@ -48,7 +56,6 @@ class ProductController extends Controller{
     }
 
     public function delete($id){
-        //dd((int) $id);
         if(Product::destroy($id))
             return redirect()->route('produto.list')->with('success', 'Produto Excluido com Sucesso.');
         else    

@@ -84,7 +84,9 @@ Route::middleware(['auth'])->group(function(){
         })->name('sessao.delete');
         Route::get('listar', 'SessionController@showL')->name('sessao.list');
         Route::get('pesquisar', 'SessionController@search')->name('sessao.search');
-        Route::get('visulizar','SessionController@showCA')->name('sessao.show');
+        Route::get('visualizar/{id}','SessionController@showCA', function($id){
+            return $id;
+        })->name('sessao.show');
     });
 });
 
@@ -116,18 +118,68 @@ Route::middleware(['auth'])->group(function(){
     });
 });
 
-Route::middleware(['auth'])->group(function(){
+//Route::middleware(['auth'])->group(function(){
     Route::prefix('tag')->group(function(){
         Route::get('cadastrar', 'TagController@showCA')->name('tag.register');
-        Route::post('create', 'TagController@create')->name('tag.create');
-        Route::get('delete', 'TagController@delete')->name('tag.delete');
+        Route::get('create/{uid?}&{id}', 'TagController@create', function($uid, $id){
+            return $uid;
+        })->name('tag.create');
+        Route::get('edit/{uid?}&{id}', 'TagController@edit', function($uid, $id){
+            return $uid;
+        })->name('tag.edit');
+        //Route::get('delete', 'TagController@delete')->name('tag.delete');
+        Route::get('listar/{uid?}','TagController@jsonTag', function($uid){
+            return $uid;
+        })->name('tag.list');
+        Route::get('verify/{uid?}','TagController@verifyTag', function($uid){
+            return $uid;
+        })->name('tag.verify');
+        Route::get('showTag/{uid?}&{ip}','TagController@showTag', function($uid){
+            return $uid;
+        })->name('tag.showTag');
     });
+//});
+
+Route::prefix('webServiceProduct')->group(function(){
+    Route::get('create/{id}&{ip}', 'WebServiceProductController@create')->name('webserviceproduct.create');
 });
 
+//verificar com o rogerio middleware
+Route::prefix('webService')->group(function(){
+    Route::get('create/{ip}', 'WebServiceController@create')->name('webservice.create');
+});
+
+Route::middleware(['auth'])->group(function(){
+    Route::prefix('usuario')->group(function(){
+        Route::get('cadastrar', 'UserController@showCA')->name('usuario.register');
+        Route::post('create', 'UserController@create')->name('usuario.create');
+        Route::post('edit/{id?}', 'UserController@edit', function($id){
+            return $id;
+        })->name('usuario.edit'); 
+        Route::get('delete/{id}', 'UserController@delete', function($id){
+            return $id;
+        })->name('usuario.delete');
+        Route::get('listar', 'UserController@showL')->name('usuario.list');
+        Route::get('pesquisar', 'UserController@search')->name('usuario.search');
+        Route::get('visualizar/{id}', 'UserController@showCA', function($id){
+            return $id;
+        })->name('usuario.show');
+    });
+});
+Route::prefix('notification')->group(function(){
+    Route::get('list', "NotificationController@showList")->name('notification.list');
+    Route::get('create', "NotificationController@create")->name('notification.create');
+    Route::get('visualizar', "NotificationController@show")->name('notification.show');
+    Route::get('delete/{id}', "NotificationController@delete", function($id){
+        return $id;
+    })->name('notification.delete');
+});
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-
+//Route::get('/teste/teste', 'HomeController@teste')->name('teste');
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+
+//Route::get('/home', 'HomeController@index')->name('home');

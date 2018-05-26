@@ -5,6 +5,7 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\User;
 
 trait AuthenticatesUsers
 {
@@ -65,6 +66,12 @@ trait AuthenticatesUsers
         ]);
     }
 
+    public function message(){
+        return [
+            'email.required'    => 'O campo E-mail é de preenchimento obrigatorio',
+            'password.required' => 'O campo Senha é de preenchimento obrigatorio'
+        ];
+    }
     /**
      * Attempt to log the user into the application.
      *

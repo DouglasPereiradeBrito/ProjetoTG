@@ -16,7 +16,7 @@ class BrandController extends Controller{
     public function showCA($id = null){
         $title = 'Marca';
         $route = 'marca';
-        $forms = ['id' => 'ID', 'description' => 'Descrição'];
+        $forms = ['id' => 'ID', 'description' => 'Nome'];
 
         if($id)
             $models = Brand::find($id);
@@ -35,7 +35,7 @@ class BrandController extends Controller{
     }
 
     public function edit(Request $request){
-        $this->validate($request, $this->brand->rules);
+        $this->validate($request, $this->brand->rules, $this->brand->messages);
 
         $brand = Brand::find($request->id);
 
@@ -46,7 +46,7 @@ class BrandController extends Controller{
     }
 
     public function create(Request $request){;
-        $this->validate($request, $this->brand->rules);
+        $this->validate($request, $this->brand->rules, $this->brand->messages);
 
         if(Brand::create($request->all()))
             return redirect()->route('marca.list')->with('success','Marca Cadastrar com Sucesso.');

@@ -32,6 +32,7 @@ class CategoryController extends Controller{
         $models = Category::orderBy('id', 'asc')->paginate(5);
 
         return view('defaultList', compact(['models', 'route', 'tables', 'title']));
+        //return response()->json($models);
     }
 
     public function create(Request $request){
@@ -66,7 +67,7 @@ class CategoryController extends Controller{
     public function search(Request $request){
         $models = null;
         $title = 'Categoria';
-        $tables = ['Id','Descrição','Criado','Atualizado','Ações'];
+        $tables = ['Id', 'Descrição', 'Criado', 'Atualizado', 'Ações'];
         $route = 'categoria';
 
         if(is_Null($request->description) && is_Null($request->criado) && is_Null($request->atualizado))

@@ -1,11 +1,10 @@
 @extends('adminlte::master')
 
 @section('adminlte_css')
-    <link rel="stylesheet"
-          href="{{ asset('vendor/adminlte/dist/css/skins/skin-' . config('adminlte.skin', 'blue') . '.min.css')}} ">
-          <!--<link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/bootstrap-timepicker.css') }}">
-          <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/bootstrap-timepicker.min.css') }}">-->
-          <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/skins/skin-' . config('adminlte.skin', 'blue') . '.min.css')}} ">
+    <!--<link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/bootstrap-timepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/bootstrap-timepicker.min.css') }}">-->
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/daterangepicker.css') }}">
     @stack('css')
     @yield('css')
 @stop
@@ -25,7 +24,7 @@
             <nav class="navbar navbar-static-top">
                 <div class="container">
                     <div class="navbar-header">
-                        <a href="{{ url(config('adminlte.dashboard_url', 'home')) }}" class="navbar-brand">
+                        <a href="{{ url(config('adminlte.dashboard_url', '/')) }}" class="navbar-brand">
                             {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
                         </a>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
@@ -60,61 +59,20 @@
                 <div class="navbar-custom-menu">
 
                         <ul class="nav navbar-nav">
-                            <li class="dropdown notifications-menu">       
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning">10</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">You have 10 notifications</li>
-                                    <li>
-                                        <!-- inner menu: contains the actual data -->
-                                        <ul class="menu">
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                                                    page and may cause design problems
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-users text-red"></i> 5 new members joined
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-user text-red"></i> You changed your username
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="footer"><a href="#">View all</a></li>
-                                </ul>
-                            </li>   
-
+                            <li class="dropdown notifications-menu" id="teste">
+                                
+                            </li>
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="dist/img/user2-160x160.jpg" class="user-image">
-                                    <span class="hidden-xs">{{auth()->user()->name}}</span>
+                                    <span class="hidden-xs">{{ !!Auth::user() == true ? auth()->user()->name : '' }}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
-                                    <li class="user-header">
-                                        <img src="dist/img/user2-160x160.jpg" class="img-circle">
-                                        <p>{{auth()->user()->name}} - Web Developer<small>Member since Nov. 2012</small></p>
+                                    <li class="user-header">    
+                                        <p>{{ !!Auth::user() == true ? auth()->user()->name : '' }}</p>
                                     </li>
                                     <!-- Menu Body -->
-                                    <li class="user-body">
+                                    <!--<li class="user-body">
                                         <div class="row">
                                             <div class="col-xs-4 text-center">
                                             <a href="#">Followers</a>
@@ -126,12 +84,12 @@
                                             <a href="#">Friends</a>
                                             </div>
                                         </div>
-                                    <!-- /.row -->
-                                    </li>
+                                    <!-- /.row
+                                    </li>-->
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                            <a href="{{ route('usuario.show', auth()->user()->id) }}" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
                                             @if(config('adminlte.logout_method') == 'GET' || !config('adminlte.logout_method') && version_compare(\Illuminate\Foundation\Application::VERSION, '5.3.0', '<'))
@@ -186,14 +144,14 @@
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
 
-                <form action="#" method="get" class="sidebar-form">
+                <!-- <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search...">
+                        <input type="text" name="q" class="form-control"/>
                         <span class="input-group-btn">
                             <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
-                </form>
+                </form> -->
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     @each('adminlte::partials.menu-item', $adminlte->menu(), 'item')
@@ -232,7 +190,7 @@
             <div class="pull-right hidden-xs">
                 <b>Version</b> 1.0
             </div>
-            <strong>Copyright © 2018 .</strong> All rights reserved.
+            <strong>Copyright PD © 2018</strong> All rights reserved.
         </footer>
     </div>
     <!-- ./wrapper -->
@@ -248,7 +206,7 @@
     <script src="{{ asset('vendor/adminlte/dist/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/app.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/select2.full.min.js') }}"></script>
-
+    <script src="{{ asset('vendor/adminlte/dist/js/request.js') }}"></script>
     @stack('js')
     @yield('js')
 @stop

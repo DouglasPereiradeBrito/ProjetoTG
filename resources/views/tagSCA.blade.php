@@ -1,63 +1,138 @@
 @extends('adminlte::page')
 
-@section('title', 'AdminLTE')
+@section('title', 'PrateleiraDigital')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
     @include('includes.breadcrumb')
+
 @stop
 
 @section('content')
     @include('includes.alerts')
-    <div class="box {{isset($models->id) ? 'box-warning' : 'box-success'}}">
-        @if(isset($models->id))
-            <form role="form" method='POST' action='{{ route("$route.edit") }}'>   
-        @else         
-            <form role="form" method='POST' action='{{ route("$route.create") }}'>
-        @endif
-            <div class="box-body">
-                <div class="form-group">
-                    <button type="submit" class="btn {{ isset($models->id) ? 'btn-warning' : 'btn-success' }} "><span class='glyphicon {{ isset($models->id) ? 'glyphicon-refresh' : 'glyphicon-ok glyphicon' }}'></span>{{ isset($models->id) ? ' Alterar' : ' Cadastrar' }}</button>
-                    <button type="submit" class="btn {{ isset($models->id) ? 'btn-warning' : 'btn-success' }} "><span class='glyphicon {{ isset($models->id) ? 'glyphicon-refresh' : 'glyphicon-ok glyphicon' }}'></span> Concluir</button>
-                    <a href='{{ route("$route.delete", isset($models->id) ? $models->id : '') }}' class="btn btn-danger {{ isset($models->id) ? '' : 'hidden' }}"><span class='glyphicon glyphicon-remove'></span> Excluir</a>
-                </div>
-                @foreach($forms as $key => $form)
-                    @if($key == 'product')
-                        <div class="form-group col-sm-12 col-md-6">
+       
+        <div class="box">
+                <div class="box-body">
+                <div class="col-sm-12 col-md-6">
+                    @foreach($forms as $key => $form)
+                        @if($key == 'product')
                             <label>{{ $forms[$key][0] }}</label>
-                            <select class="form-control select2 select2-hidden-accessible" name="{{ $key.'_id' }}" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                            <select id="product" onchange="ListarIds();" class="form-control select2 select2-hidden-accessible" name="{{ $key.'_id' }}" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                 @foreach($forms[$key][1] as $form)
                                     <option value='{{ $form->id }}' {{ isset($models->$key->id) && $models->$key->id == $form->id ? 'selected' : '' }}>{{ $form->description }}</option>
                                 @endforeach
                             </select>
+                        @else  
+                            <div class="form-group {{ !isset($models->id) && $key == 'id' ? 'hidden' : '' }}">
+                                <label for="{{ $key }}">{{ $form }}</label>
+                                <input type="text" name='{{ $key }}' class="form-control" id="{{ $key }}" {{ $key == 'id' && isset($models->id) ? 'readonly' : '' }} value='{{ $models->$key or old('$key') }}'/>
+                            </div> 
+                        @endif
+                    @endforeach 
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <label></label>
+                    <div class="box">
+                        <div class="box-header">
+                            <span class="box-title text-left">Tags Cadastradas</span>
+                            <div class="box-tools pull-right">
+                                <strong><span class="align-middle" id="total"></span></strong>
+                            </div>
                         </div>
-                    @else  
-                        <div class="form-group {{ !isset($models->id) && $key == 'id' ? 'hidden' : '' }}">
-                            <label for="{{ $key }}">{{ $form }}</label>
-                            <input type="text" name='{{ $key }}' class="form-control" id="{{ $key }}" {{ $key == 'id' && isset($models->id) ? 'readonly' : '' }} value='{{ $models->$key or old('$key') }}'/>
-                        </div> 
-                    @endif
-                @endforeach      
-                <div class="col-sm-12 col-md-6 form-group">
-                    <label>Tags Cadastradas</label>
-                    <textarea class="form-control" rows="3" placeholder="Enter ..." disabled=""></textarea>
+                        <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tbody id="lista">
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box-footer clearfix" id="paginate">
+                        
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-sm-11 col-md-11 offset-sm-11 offset-md-11"></div>
+                <div class="col-sm-3 col-md-1">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-info">+</button>
+                    <!--<button type="button" data-toggle="modal" data-target="#modal-verify"></button>-->
+                </div>       
                 </div>
                 {!! csrf_field() !!}
-            </div>
-        </form>
-        <!--<form role="form" method='POST' action='{{ route("$route.create")}}'>
-            <div class="box-body">
-                <div class="form-group {{isset($model->id) ? '' : 'hidden'}}">
-                    <label for="id">ID</label>
-                    <input type="text" name='id' class="form-control" id="id" readonly value='{{$model->id or old('id')}}'/>
+            <div class="overlay hidden" id="teste">
+                <i class="fa fa-refresh fa-spin"></i>
+            </div> 
+        </div>    
+
+            <div class="modal modal-success fade" id="modal-info" style="display: none;">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title text-center">Cadastro de Tags</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center text-white">Aproxime as tags no leitor para cadastrá-las</p>
+                        <div class="row">
+                            <div class="col-sm-2 col-md-4 offset-sm-2 offset-md-4"></div>
+                            <div class="col-sm-8 col-md-8">
+                                <div class="col-sm-5 offset-sm-5"></div>
+                                <div class="col-sm-12 col-md-11">
+                                    <button id="start" onclick="makeRequestFull();start();$('#load').addClass('overlay').removeClass('hidden');$('#start').addClass('hidden');$('#stop').removeClass('hidden');" class="btn btn-info">Iniciar Leitura</button>
+                                    <button onclick="terminar();$('#start').removeClass('hidden');$('#stop').addClass('hidden');$('#load').addClass('hidden');" id="stop" class="btn btn-danger hidden">Finalizar Leitura</button>
+                                </div>
+                            </div>
+                        </div>
+                        <p></p>
+                        <div class="box"  style="height: 100px">
+                                <div class="box-body" id="list-group">
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        <div class="hidden" id="load">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fechar</button>
+                        <a href='#' onclick="create()" class="btn btn-outline">Cadastrar</a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="description">Descrição</label>
-                    <input type="text" name='description' class="form-control" id="description" value='{{$model->description or old("description")}}' />
-                </div>                
-                
-                
+                </div>
             </div>
-        </form>-->
-    </div>    
+
+            <!--///////////////////////////////////////////////////////////////////////////////////-->
+            <div class="modal modal-warning fade" id="modal-verify" style="display: none;">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title text-center">Tag já Cadastrada</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">Deseja Alterar a Tag ?</p>
+                        <div> 
+                            <p class="text-center">Selecione um novo produto para tag.</p>
+                            <label class="text-center" style="text-align: center">Produtos</label>
+                            <select id="tag-verify" class="form-control select2 select2-hidden-accessible" name="{{ $key.'_id' }}" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                
+                            </select>
+                    </div>
+                    <div class="box-body" id="tag">
+                            <div class="offset-sm-0 col-md-4 offset-md-4"></div><li class="list-group-item col-sm-12 col-md-4 text-muted text-center"><i class="icon fa fa-tags"></i> 04837c5a314d80</li>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-outline">Alterar</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+    <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/request.js') }}"></script>
+    <!--<script src="{{ asset('vendor/adminlte/dist/js/paginate.js') }}"></script>-->
 @stop

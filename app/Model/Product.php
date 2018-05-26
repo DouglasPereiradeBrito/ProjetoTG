@@ -11,8 +11,16 @@ class Product extends Model{
     protected $fillable = ['description', 'price', 'session_id', 'category_id', 'gondola_id', 'brand_id'];
 
     public $rules = [
-        'description'   => 'required|min:3',
+        'description'   => 'required|min:3|max:30',
         'price'         => 'required|numeric'
+    ];
+
+    public $messages = [
+        'description.required'  => 'O campo Nome é de preenchimento obrigatorio.',
+        'description.min'       => 'O campo Nome deve conter no minimo 3 caracteres.',
+        'description.max'       => 'O campo Nome deve conter no maximo 30 caracteres.',
+        'price.required'        => 'O campo Preço é de preenchimento obrigatorio.',
+        'price.numeric'         => 'O campo Preço é deve conter apenas números.'
     ];
 
     public function gondola(){
@@ -32,12 +40,10 @@ class Product extends Model{
     }
 
     public function registerChange($value, $before){
-        //dd($beforet);
         if(isset($value->id)){
             $obj = Product::find($value->id);
             $registerChange = $obj->update($value->all());
             $after = Product::find($value->id);
-            //dd($before, $after);
         }else{
             $after = Product::create($value->all());
             $registerChange = $before = $after;

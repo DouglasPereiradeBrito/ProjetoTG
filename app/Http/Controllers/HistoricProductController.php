@@ -13,7 +13,7 @@ use App\Model\Gondola;
 class HistoricProductController extends Controller{
 
     public function showL(){
-        $title = 'Historico';
+        $title = 'Histórico';
         $route = 'historico';
         $tables = ['' => 1, 'Usuário' => 1, 'Produto' => 4, 'Marca' => 2, 'Gôndola' => 2, 'Categoria' => 2, 'Sessão' => 2, '' => 1];
         $brands = Brand::all();
@@ -28,7 +28,7 @@ class HistoricProductController extends Controller{
 
     public function search(Request $request){
         $models = null;
-        $title = 'Historico';
+        $title = 'Histórico';
         $route = 'historico';
         $tables = ['' => 1, 'Usuário' => 1, 'Produto' => 4, 'Marca' => 2, 'Gôndola' => 2, 'Categoria' => 2, 'Sessão' => 2, '' => 1];
         $brands = Brand::all();

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 2',
+    'title' => 'Prateleira Digital',
 
     'title_prefix' => '',
 
@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>Prateleira</b>Digital',
 
-    'logo_mini' => '<b>A</b>LT',
+    'logo_mini' => '<b>P</b>D',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'skin' => 'red',
+    'skin' => 'green',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
 
     'logout_url' => 'logout',
 
@@ -108,45 +108,42 @@ return [
     */
 
     'menu' => [
-        'MAIN NAVIGATION',
         [
-            'text' => 'Blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
-        [
-            'text'      => 'Funcionario',
-            'icon'      => 'user',
+            'text'      => 'Funcionário',
+            'icon'      => 'address-card',
+            'can'       => 'SCA', 'L',
             'submenu'   => [
                 [
                     'text'  => 'Cadastrar',
-                    'url'   => 'funcionario/cadastrar'
+                    'url'   => 'usuario/cadastrar'
                 ],
                 [
                     'text'  => 'Listar',
-                    'url'   => 'funcionario/listar' 
+                    'url'   => 'usuario/listar' 
                 ]
-            ]    
+            ]   
         ],
         [
             'text'        => 'Marca',
-            'icon'        => '',
-            'label'       => 4,
-            'label_color' => 'success',
+            'icon'        => 'star',
+            'can'       => 'SCA', 'L',
             'submenu' => [
                 [
                     'text'  => 'Cadastrar',
-                    'url'   => '/marca/cadastrar'
+                    'url'   => '/marca/cadastrar',
+                    'can'       => 'SCA'
                 ],
                 [
                     'text'  => 'Listar',
-                    'url'   => '/marca/listar'
+                    'url'   => '/marca/listar',
+                    'can'       => 'L'
                 ]
             ]
         ],
         [
             'text'      => 'Categoria',
-            'icon'      => 'file',
+            'icon'      => 'shirtsinbulk',
+            'can'       => 'SCA', 'L',
             'submenu'   => [
                 [
                     'text'  => 'Cadastrar',
@@ -159,8 +156,9 @@ return [
             ]
         ],
         [
-            'text'      => 'Gondola',
-            'icon'      => 'file',
+            'text'      => 'Gôndola',
+            'icon'      => 'map',
+            'can'       => 'SCA', 'L',
             'submenu'   => [
                 [
                     'text'  => 'Cadastrar',
@@ -174,7 +172,8 @@ return [
         ],
         [
             'text'      => 'Sessão',
-            'icon'      => 'file',
+            'icon'      => 'map-pin',
+            'can'       => 'SCA', 'L',
             'submenu'   => [
                 [
                     'text'  => 'Cadastrar',
@@ -188,102 +187,40 @@ return [
         ],
         [
             'text'      => 'Produto',
-            'icon'      => 'file',
+            'icon'      => 'archive',
             'submenu'   => [
                 [
                     'text'  => 'Cadastrar',
-                    'url'   => 'produto/cadastrar'
+                    'url'   => 'produto/cadastrar',
+                    'can'       => 'SCA'
                 ],
                 [   
                     'text'  => 'Listar',
-                    'url'   => 'produto/listar'
+                    'url'   => 'produto/listar',
+                    'can'       => 'L'
                 ]
             ]
         ],
         [   
             'text'      => 'Tag',
-            'icon'      => 'file',
+            'icon'      => 'tags',
             'submenu'   => [
                 [
                     'text'  => 'Cadastrar',
                     'url'   => 'tag/cadastrar'
-                ],
-                [
-                    'text'  => 'Listar'
                 ]
             ]
         ],
         [
-            'text'      => 'Historico',
-            'icon'      => 'file',
+            'text'      => 'Histórico',
+            'icon'      => 'database',
+            'can'       => 'SCA', 'L',
             'submenu'   => [
                 [
                     'text'  => 'Listar',
                     'url'   => 'historico/listar'
                 ]
             ]
-        ],
-        'ACCOUNT SETTINGS',
-        [
-            'text' => 'SAve',
-            'url'  => '/marca/save',
-            'icon' => 'user',
-        ],
-        [
-            'text' => 'Change Password',
-            'url'  => 'admin/settings',
-            'icon' => 'lock',
-        ],
-        [
-            'text'    => 'Multilevel',
-            'icon'    => 'share',
-            'submenu' => [
-                [
-                    'text' => 'Level One',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'Level One',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'Level Two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'Level Two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'Level Three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'Level Three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'Level One',
-                    'url'  => '#',
-                ],
-            ],
-        ],
-        'LABELS',
-        [
-            'text'       => 'Important',
-            'icon_color' => 'red',
-        ],
-        [
-            'text'       => 'Warning',
-            'icon_color' => 'yellow',
-        ],
-        [
-            'text'       => 'Information',
-            'icon_color' => 'aqua',
         ],
     ],
 

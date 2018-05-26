@@ -4,7 +4,6 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RolesPermissions extends Model
-{
-    //
+class WebService extends Model{
+    public $fillable = ['ip'];
 }
