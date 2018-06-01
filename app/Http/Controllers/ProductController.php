@@ -30,6 +30,7 @@ class ProductController extends Controller{
     }
 
     public function create(Request $request, Product $product){
+        
         $this->validate($request, $this->products->rules, $this->products->messages);
         if($product->registerChange($request, isset($request->id) ? Product::find($request->id) : null))
             return redirect()->route('produto.list')->with('success', 'Produto Cadastrado com Sucesso.');
@@ -41,10 +42,11 @@ class ProductController extends Controller{
         $title = 'Produto';
         $route = 'produto';
         $tables = ['ID', 'Nome', 'Marca', 'Sessão', 'Categoria', 'Gôndola', 'Preço', 'Criado', 'Atualizado', auth()->user()->can('SCA') ? 'Ação' : ''];
-
+        $status = count(Product::where('status', true)->get());
+        
         $models = Product::orderBy('id', 'asc')->with('brand', 'session', 'category', 'gondola')->paginate(5);
- 
-        return view('defaultList', compact(['models', 'title', 'route', 'tables']));
+        //dd($status);
+        return view('defaultList', compact(['models', 'title', 'route', 'tables', 'status']));
     }
 
     public function edit(Request $request, Product $product){
@@ -94,5 +96,17 @@ class ProductController extends Controller{
             return redirect()->back()->with('error', "Item não existe.");
 
         return view('defaultList', compact(['models', 'title', 'tables', 'route']));
+    }
+
+    public function liberar(){
+        Product::where('status', false)->update(['status' => 'true']);
+
+        return redirect()->route('produto.list');
+    }
+
+    public function fechar(){
+        Product::where('status', true)->update(['status' => 'false']);
+
+        return redirect()->route('produto.list');
     }
 }

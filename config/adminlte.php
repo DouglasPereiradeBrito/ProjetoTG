@@ -119,7 +119,7 @@ return [
                 ],
                 [
                     'text'  => 'Listar',
-                    'url'   => 'usuario/listar' 
+                    'url'   => 'usuario/listar'
                 ]
             ]   
         ],
@@ -182,7 +182,7 @@ return [
                 [
                     'text'  => 'Listar',
                     'url'   => 'sessao/listar'
-                ]
+                ] 
             ]
         ],
         [
@@ -192,13 +192,18 @@ return [
                 [
                     'text'  => 'Cadastrar',
                     'url'   => 'produto/cadastrar',
-                    'can'       => 'SCA'
+                    'can'   => 'SCA'
                 ],
                 [   
                     'text'  => 'Listar',
                     'url'   => 'produto/listar',
-                    'can'       => 'L'
-                ]
+                    'can'   => 'L',
+                ],
+                [
+                    'text'  => 'Liberar',
+                    'url'   => 'produto/listar',
+                    'can'   => 'SCA',
+                ],
             ]
         ],
         [   

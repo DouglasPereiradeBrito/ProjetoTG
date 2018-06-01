@@ -25,6 +25,7 @@ class CreateProductsTable extends Migration
             $table->foreign('gondola_id')->references('id')->on('gondolas')->onDelete('cascade');
             $table->string('description');
             $table->double('price', 10,2);
+            $table->boolean('status'); 
             $table->timestamps();
         });
     }

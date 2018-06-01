@@ -105,6 +105,8 @@ Route::middleware(['auth'])->group(function(){
         Route::get('visualizar/{id}', 'ProductController@showCA', function($id){
             return $id;
         })->name('produto.show');
+        Route::get('liberar', 'ProductController@liberar')->name('produto.liberar');
+        Route::get('fechar', 'ProductController@fechar')->name('produto.fechar');
     });
 });
 
@@ -174,10 +176,7 @@ Route::prefix('notification')->group(function(){
         return $id;
     })->name('notification.delete');
 });
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-//Route::get('/teste/teste', 'HomeController@teste')->name('teste');
+
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');

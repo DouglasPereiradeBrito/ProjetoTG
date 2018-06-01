@@ -40,74 +40,78 @@ class TagController extends Controller{
     public function showTag($uid, $ip){
         $webService = null;
         if($uid != 0){
-            $models = ProductTag::with('product')->where('tag_uid', $uid)->get();
-            $webServiceProduct = WebServiceProduct::where('product_id', $models[0]->product->id)->get();
+            $productTag = ProductTag::with('product')->where('tag_uid', $uid)->get();
             $webService = WebService::where('ip', 'like', $ip)->get();
-            $produto = Product::with('brand', 'session', 'category', 'gondola')->find($models[0]->product->id);
+            //dd($productTag[0], $webService[0]);
+            $webServiceProduct = WebServiceProduct::where('product_id', $productTag[0]->product_id)->where('websevice_id', $webService[0]->id)->get();
+            $produto = Product::with('brand', 'session', 'category', 'gondola')->find($productTag[0]->product->id);
+            //dd($webServiceProduct);
         }
-        //dd($webServiceProduct);
-        /*$url = "http://192.168.103.161/ip"; 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL,$url);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        dd($result);*/
-        ///terminar
-        /*foreach($webServiceProduct as $webService){
-            echo $webService->ip;
-        }*/
-        //dd(count(WebService::where('ip', 'like', $ip)->get()));
+
         if(count($webService) == 1){
+            
+            //dd($webServiceProduct);
             if(count($webServiceProduct) == 0){
-                /*WebServiceProduct::create([
-                    'websevice_id'  => $webService[0]->id
-                    'product_id'    => $models[0]->product->id
-                ]);*/
-                //dd($produto->description);
-                $description = "Produto ". $produto->description ." no local errado! Gondola ".$produto->gondola->description;
-                $teste = Notification::where('description', 'like', $description)->whereDate('created_at',  date('Y/m/d'))->get();
-                
-                if(isset($teste) && !empty($teste[0])){
-                    if($teste[0]->description != $description){
-                        (new NotificationController())->create($description);
-                    }
-                }else{
-                    (new NotificationController())->create($description);
+                if(count(WebServiceProduct::where('websevice_id', $webService[0]->id)->get()) == 0){
+                    //dd($webService[0]->id);
+                    WebServiceProduct::create([
+                        'product_id'   => $productTag[0]->product_id,
+                        'websevice_id'  => $webService[0]->id
+                    ]); 
                 }
-                //TODO ainda mostrar produto
-                //$notification->create($description);
-                //return response()->json($description);
-                
+                if(count(Product::where('status', true)->get()) > 0){
+                    WebServiceProduct::where('websevice_id', $webService[0]->id)->update([
+                        'product_id'    => $productTag[0]->product_id
+                    ]);   
+                }
+                return $this->showLcdProduct($webService);              
             }else{
-                
-                if($models[0]->product->id == $webServiceProduct[0]->product_id && $webServiceProduct[0]->websevice_id == $webService[0]->id){
-                    return response()->json([$models[0]->product->description, $models[0]->product->price]);
-                }else {
+                if($productTag[0]->product_id == $webServiceProduct[0]->product_id){
+                    return response()->json([$productTag[0]->product->description, $productTag[0]->product->price]);
+                }else{
+                    $this->notification($produto);
                     //return response()->json("Produto em local Indevido");
-                    $webServiceProduct = WebServiceProduct::where('websevice_id', $webService[0]->id)->get();
-                    $models = Product::where('id', $webServiceProduct[0]->product_id)->get();
-                    return response()->json([$models[0]->description, $models[0]->price]);
+                    return $this->showLcdProduct($webService);
                 }
             }
         }else{
+            
             if($webService == null){
                 $webService = WebService::where('ip', 'like', $ip)->get();
                 if(count($webService) != 0){
-                    $webServiceProduct = WebServiceProduct::where('websevice_id', $webService[0]->id)->get();
-                    $models = Product::where('id', $webServiceProduct[0]->product_id)->get();
-                    return response()->json([$models[0]->description, $models[0]->price]);
+                    return $this->showLcdProduct($webService);
                 }else{
                     //return response()->json("Não há IP Cadastrado");
-                    $webServiceProduct = WebServiceProduct::where('websevice_id', $webService[0]->id)->get();
-                    $models = Product::where('id', $webServiceProduct[0]->product_id)->get();
-                    return response()->json([$models[0]->description, $models[0]->price]);
+                    return $this->showLcdProduct($webService);
                 }
             }else{
                 //return response()->json("Não há IP Cadastrado");
-                $webServiceProduct = WebServiceProduct::where('websevice_id', $webService[0]->id)->get();
+                return $this->showLcdProduct($webService);
+            }
+        }
+    }
+
+    public function notification($produto){
+        $description = "Produto ". $produto->description ." no local errado! Gondola ".$produto->gondola->description;
+        $notification = Notification::where('description', 'like', $description)->whereDate('created_at',  date('Y/m/d'))->get();
+        
+        if(isset($notification) && !empty($notification[0])){
+            if($notification[0]->description != $description){
+                (new NotificationController())->create($description);
+            }
+        }else{
+            (new NotificationController())->create($description);
+        }
+    }
+
+    public function showLcdProduct($webService){
+        if(count($webService)){
+            $webService =  $webService[0];
+            $webServiceProduct = WebServiceProduct::where('websevice_id', $webService->id)->get();
+
+            if(count($webServiceProduct) > 0){
                 $models = Product::where('id', $webServiceProduct[0]->product_id)->get();
+
                 return response()->json([$models[0]->description, $models[0]->price]);
             }
         }

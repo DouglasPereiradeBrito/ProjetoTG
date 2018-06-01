@@ -64,7 +64,7 @@
                             </li>
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <span class="hidden-xs">{{ !!Auth::user() == true ? auth()->user()->name : '' }}</span>
+                                    <span>{{ !!Auth::user() == true ? auth()->user()->name : '' }}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
@@ -143,15 +143,6 @@
 
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
-
-                <!-- <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control"/>
-                        <span class="input-group-btn">
-                            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                </form> -->
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     @each('adminlte::partials.menu-item', $adminlte->menu(), 'item')
@@ -179,21 +170,17 @@
                 @yield('content')
 
             </section>
-            <!-- /.content -->
             @if(config('adminlte.layout') == 'top-nav')
             </div>
-            <!-- /.container -->
             @endif
         </div>
-        <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <div class="pull-right hidden-xs">
+            <!--<div class="pull-right hidden-xs">
                 <b>Version</b> 1.0
-            </div>
+            </div>-->
             <strong>Copyright PD © 2018</strong> All rights reserved.
         </footer>
     </div>
-    <!-- ./wrapper -->
 @stop
 
 @section('adminlte_js')

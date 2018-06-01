@@ -44,6 +44,9 @@
                 </div> 
             @endif
         @endforeach
+        @if($route == 'produto')
+            <input type="text" name="status" hidden value="false"/>
+        @endif
         @if(auth()->user()->can('SCA') && $route == 'usuario')
             <div class="form-group col-sm-12">
                 <label>{{ $roles[0] }}</label>

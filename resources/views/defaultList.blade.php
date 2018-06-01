@@ -15,16 +15,13 @@
           <div class="box">
             <div class="box-body">
               <form action="{{ route("$route.search") }}" method="GET">
-                <!--@if($title === 'Historico') 
-                  <div class='col-sm-12 col-md-6'>
-                @endif-->
-                  <div class="form-group {{ $title == 'Historico' ? 'col-sm-6' : 'margin' }}">
+                  <div class="form-group {{ $route == 'historico' ? 'col-sm-6' : 'margin' }}">
                     {!! csrf_field() !!}
                     <label>Nome</label>
                     <input class="form-control" type="text" id='description' name='description'/>
                   </div>
                   @if(isset($brands, $sessions))
-                    <div class="col-sm-3 form-group {{ $title === 'Historico' ? '' : 'hidden' }}">
+                    <div class="col-sm-3 form-group {{ $route === 'historico' ? '' : 'hidden' }}">
                       <label>Marca</label>
                         <select class="form-control select2 select2-hidden-accessible" name="brand" style="width: 100%;" tabindex="-1" aria-hidden="true">
                           <option select='true'></option>
@@ -32,8 +29,8 @@
                             <option value='{{ $brand->description }}'>{{ $brand->description }}</option>
                           @endforeach
                         </select>
-                    </div>
-                    <div class="col-sm-3 form-group {{ $title === 'Historico' ? '' : 'hidden' }}">
+                      </div>
+                    <div class="col-sm-3 form-group {{ $route === 'historico' ? '' : 'hidden' }}">
                       <label>Sessão</label>
                       <select class="form-control select2 select2-hidden-accessible" name="session" style="width: 100%;" tabindex="-1" aria-hidden="true">
                         <option select='true'></option>
@@ -44,7 +41,7 @@
                     </div>
                   @endif
 
-                  <div class="form-group {{ $title == 'Historico' ? 'col-sm-6' : 'col-sm-6' }}">
+                  <div class="form-group {{ $route == 'historico' ? 'col-sm-6' : 'col-sm-6' }}">
                     <label>Criado a</label>
                     <div class="input-group">
                       <div class="input-group-btn">
@@ -58,7 +55,7 @@
                       <input name='criado' id='criado' class="form-control" readonly/>
                     </div>
                   </div>
-                  <div class="col-sm-6 form-group {{ $title === 'Historico' ? 'hidden' : '' }}">
+                  <div class="col-sm-6 form-group {{ $route === 'historico' ? 'hidden' : '' }}">
                     <label>Atualizado a</label>
                     <div class="input-group">
                       <div class="input-group-btn">
@@ -72,11 +69,9 @@
                       <input name='atualizado' id='atualizado' class="form-control" readonly/>
                     </div>
                   </div>
-                  <!--@if($title === 'Historico') 
-                    </div>
-                  @endif-->
-                @if(isset($categories, $gondolas))
-                  <div class="col-sm-3 form-group {{ $title === 'Historico' ? '' : 'hidden' }}">
+                  
+                @if(isset($categories) && isset($gondolas))
+                  <div class="col-sm-3 form-group {{ $route === 'historico' ? '' : 'hidden' }}">
                     <label>Categoria</label>
                     <select class="form-control select2 select2-hidden-accessible" name="category" style="width: 100%;" tabindex="-1" aria-hidden="true">
                       <option select='true'></option>
@@ -85,7 +80,7 @@
                       @endforeach
                     </select>
                   </div>
-                  <div class="col-sm-3 form-group {{ $title === 'Historico' ? '' : 'hidden' }}">
+                  <div class="col-sm-3 form-group {{ $route === 'historico' ? '' : 'hidden' }}">
                     <label>Gôndola</label>
                     <select class="form-control select2 select2-hidden-accessible" name="gondola" style="width: 100%;" tabindex="-1" aria-hidden="true">
                       <option select='true'></option>
@@ -95,9 +90,14 @@
                     </select>
                   </div>
                 @endif
-                  <div class="form-group pull-right">
-                    <button type="submit" class="btn btn-default">Pesquisar</button>
-                  </div>
+                @if($route == 'produto')
+                  @can('SCA')
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-libera">Liberar</button>
+                  @endcan
+                @endif
+                <div class="form-group pull-right">
+                  <button type="submit" class="btn btn-default">Pesquisar</button>
+                </div>
               </form>
             </div>
           </div>
@@ -191,5 +191,35 @@
           </div>
         </div>
       </div> 
-    </div>       
+    </div>    
+    
+    
+    <div class="modal modal-danger fade" id="modal-libera" style="display: none;">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title text-center">Liberar Mudanças de Produtos</h4>
+          </div>
+          @if(isset($status) && $status == 0)
+            <div class="modal-body">
+              <b><p class="text-center">Tem certeza de Liberar acesso para Mudança dos Produtos</p></b>
+            </div>
+          @else
+            <div class="modal-body">
+              <b><p class="text-center">Tem certeza de Fechar acesso para Mudança dos Produtos</p></b>
+            </div>
+          @endif
+          <div class="modal-footer">
+            @if(isset($status) && $status == 0)
+              <a href="{{ route('produto.liberar') }}" class="btn btn-outline">Liberar</a>
+            @else
+              <a href="{{ route('produto.fechar') }}" class="btn btn-outline">Fechar</a>
+            @endif
+          </div>
+      </div>
+      </div>
+  </div>
+
 @stop

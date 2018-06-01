@@ -19,7 +19,7 @@
 
         @if(config('adminlte.plugins.select2'))
             <!-- Select2 -->
-            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css">
+            <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/cdnjs.cloudflare.com_ajax_libs_select2_4.0.3_css_select2.css') }}">
         @endif
 
         <!-- Theme style -->
@@ -27,7 +27,7 @@
 
         @if(config('adminlte.plugins.datatables'))
             <!-- DataTables -->
-            <link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+            <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/cdn.datatables.net_1.10.15_css_jquery.dataTables.min.css') }}">
         @endif
 
         @yield('adminlte_css')
@@ -38,7 +38,7 @@
         <![endif]-->
 
         <!-- Google Font -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/fonts.googleapis.css') }}">
     </head>
     <body class="hold-transition @yield('body_class') ">
 

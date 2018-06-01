@@ -8,7 +8,7 @@ use App\Model\Brand;
 
 class Product extends Model{
 
-    protected $fillable = ['description', 'price', 'session_id', 'category_id', 'gondola_id', 'brand_id'];
+    protected $fillable = ['description', 'price', 'session_id', 'category_id', 'gondola_id', 'brand_id', 'status'];
 
     public $rules = [
         'description'   => 'required|min:3|max:30',
