@@ -1,11 +1,10 @@
 @extends('adminlte::page')
 
-@section('title', 'AdminLTE')
+@section('title', 'PrateleiraDigital')
 
 @section('content_header')
     <h1>Notificações</h1>
     @include('includes.breadcrumb')
-
 @stop
 
 @section('content')

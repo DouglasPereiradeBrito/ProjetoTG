@@ -46,7 +46,7 @@ class User extends Authenticatable{
 
     public $messages = [
         'name.required'         => 'O campo Nome é de preenchimento obrigatorio.',
-        'name.min'              => 'O campo Nome deve conter no minino 2 caracteres.',
+        'name.min'              => 'O campo Nome deve conter no minino 3     caracteres.',
         'name.string'           => 'O campo Nome deve conter apenas caracteres.',
         'email.required'        => 'O campo E-mail é de preenchimento obrigatorio.',
         'email.email'           => 'O campo E-mail não está preenchido corretamente.',
@@ -64,8 +64,9 @@ class User extends Authenticatable{
    
         if(is_array($roles) || is_object($roles)){
             $array = collect();
-            $user = UsersRoles::with('roles', 'user')->find(auth()->user()->id);
-            
+            //$user = UsersRoles::with('roles', 'user')->find(auth()->user()->id);
+            $user = UsersRoles::with('roles', 'user')->where('user_id', auth()->user()->id)->get();
+            $user = $user[0];
             foreach($roles as $role){
                 $array[] = $role->name;
             }

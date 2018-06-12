@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Brand;
+use App\Http\Controllers\Search;
+use App\Model\Product;
 
 class BrandController extends Controller{
 
@@ -20,7 +22,7 @@ class BrandController extends Controller{
 
         if($id)
             $models = Brand::find($id);
-
+            
         return view('defaultSCA', compact(['models', 'title', 'route', 'forms']));
     }
 
@@ -57,10 +59,14 @@ class BrandController extends Controller{
     public function delete($id){
         $brand = Brand::find($id);
         
-        if($brand->delete())
-            return redirect()->route('marca.list')->with('success','Marca Excluida com Sucesso.');
-        else
-            return redirect()->back()->with('error', 'Erro ao Excluir Marca.');
+        if(count(Product::where('brand_id', $brand->id)->get()) == 0){
+            if($brand->delete())
+                return redirect()->route('marca.list')->with('success','Marca Excluida com Sucesso.');
+            else
+                return redirect()->back()->with('error', 'Erro ao Excluir Marca.');
+        }else
+            return redirect()->back()->with('excluir', 'Marca Está Vinculada a  um Produto.');
+            
     }
 
     public function search(Request $request){
@@ -72,22 +78,7 @@ class BrandController extends Controller{
         if(is_Null($request->description) && is_Null($request->criado) && is_Null($request->atualizado))
             $models = Brand::orderBy('id', 'asc')->paginate(5);
         
-        if(isset($request->description))
-            $model = Brand::where('description', 'like', "%$request->description%");//orderBy('id', 'asc')->paginate(5);
-            
-        if(isset($request->criado)){
-            $created_at = explode(' - ', $request->criado);
-            if(isset($model))
-                $model->whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-            else
-                $model = Brand::whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-        }if(isset($request->atualizado)){
-            $updated_at = explode(' - ', $request->atualizado);
-            if(isset($model))
-                $model->whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-            else
-                $model = Brand::whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-        }
+        $model = Search::quest($request->description, $request->criado, $request->atualizado, Brand::class);
 
         $models = is_Null($models) ? $model->orderBy('id', 'asc')->paginate(5) : $models;
 

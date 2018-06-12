@@ -4,7 +4,7 @@ var arrayUid = [];
 
 function ListarIds(){  
     $.ajax({
-        url: "http://localhost/ProjetoTG/public/tag/listar/"+$("select#product option:checked" ).val(),
+        url: "/ProjetoTG/public/tag/listar/"+$("select#product option:checked" ).val(),
         context: document.body,
         type: "GET",
         headers: {"Access-Control-Allow-Origin": "*"},
@@ -21,7 +21,7 @@ function ListarIds(){
 
 function paginate(page){
     $.ajax({
-        url: "http://localhost/ProjetoTG/public/tag/listar/" + $("select#product option:checked" ).val()+"?page="+page,
+        url: "/ProjetoTG/public/tag/listar/" + $("select#product option:checked" ).val()+"?page="+page,
         context: document.body,
         type: "GET",
         success: function (data) {
@@ -96,7 +96,7 @@ function formPaginate(data){
 
 function create(){
     $.ajax({
-        url: "http://localhost/ProjetoTG/public/tag/create/" + arrayUid + "&" + $("select#product option:checked" ).val(),
+        url: "/ProjetoTG/public/tag/create/" + arrayUid + "&" + $("select#product option:checked" ).val(),
         context: document.body,
         type: "GET",
         success: function (data) {
@@ -115,7 +115,7 @@ function create(){
 
 function verifyTag(uid){
     $.ajax({
-        url: "http://localhost/ProjetoTG/public/tag/verify/" + uid,
+        url: "/ProjetoTG/public/tag/verify/" + uid,
         context: document.body,
         type: "GET",
         async: false,
@@ -148,7 +148,7 @@ function verifyTag(uid){
 
 function listarUid(){
     $.ajax({
-        url: "http://192.168.0.101/",
+        url: "http://192.168.103.136/",
         //url: "http://192.168.147.50/",
         //url: "http://192.168.103.20/",
         //url: "http://192.168.107.46/",
@@ -167,7 +167,7 @@ function listarUid(){
 
 function verificarUid(uid){
     $.ajax({
-        url: "http://localhost/ProjetoTG/public/tag/showTag/"+uid,
+        url: "/ProjetoTG/public/tag/showTag/"+uid,
         context: document.body,
         type: "GET",
         success: function (data) {
@@ -193,7 +193,7 @@ function verificarUid(uid){
 
 function lcd(name, price){
     $.ajax({
-        url: "http://192.168.0.101/lcd?name="+name+"&price="+price,
+        url: "http://192.168.103.136/lcd?name="+name+"&price="+price,
         //url: "http://192.168.147.50/lcd?name="+name+"&price="+price,
         //url: "http://192.168.103.20/lcd?name="+name+"&price="+price,
         //url: "http://192.168.107.46/lcd?name="+name+"&price="+price,
@@ -220,7 +220,7 @@ function lcd(name, price){
 
 function makeRequestFull(){
     $.ajax({
-        url: "http://192.168.103.187/cadastro",
+        url: "http://192.168.103.136/cadastro",
         //url: "http://192.168.147.50/cadastro",
         //url: "http://192.168.103.20/cadastro",
         context: document.body,
@@ -291,7 +291,7 @@ $('#teste2').click(function(){
 
 function carregaNotificacao(){
     $.ajax({
-        url: "http://localhost/ProjetoTG/public/notification/list",
+        url: "/ProjetoTG/public/notification/list",
         context: document.body,
         type: "GET",
         headers: {"Access-Control-Allow-Origin": "*"},
@@ -314,7 +314,7 @@ function carregaNotificacao(){
                 }
                 notificate += '</ul>'+
                                 '</li>'+
-                                '<li class="footer"><a href="http://localhost/ProjetoTG/public/notification/visualizar">View all</a></li>'+
+                                '<li class="footer"><a href="/ProjetoTG/public/notification/visualizar">View all</a></li>'+
                                 '</ul>';
             $("#teste").html(notificate).show();
         },

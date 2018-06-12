@@ -9,6 +9,7 @@ use App\Model\Category;
 use App\Model\Session;
 use App\Model\Gondola;
 use App\Model\HistoricProduct;
+use App\Http\Controllers\Search;
 
 class ProductController extends Controller{
 
@@ -45,7 +46,7 @@ class ProductController extends Controller{
         $status = count(Product::where('status', true)->get());
         
         $models = Product::orderBy('id', 'asc')->with('brand', 'session', 'category', 'gondola')->paginate(5);
-        //dd($status);
+        
         return view('defaultList', compact(['models', 'title', 'route', 'tables', 'status']));
     }
 
@@ -72,24 +73,9 @@ class ProductController extends Controller{
 
         if(is_Null($request->description) && is_Null($request->criado) && is_Null($request->atualizado))
             $models = Product::orderBy('id', 'asc')->paginate(5);
-        
-        if(isset($request->description))
-            $model = Product::where('description', 'like', "%$request->description%");
             
-        if(isset($request->criado)){
-            $created_at = explode(' - ', $request->criado);
-            if(isset($model))
-                $model->whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-            else
-                $model = Product::whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-        }if(isset($request->atualizado)){
-            $updated_at = explode(' - ', $request->atualizado);
-            if(isset($model))
-                $model->whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-            else
-                $model = Product::whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-        }
-
+        $model = Search::quest($request->description, $request->criado, $request->atualizado, Product::class);
+        
         $models = is_Null($models) ? $model->orderBy('id', 'asc')->paginate(5) : $models;
 
         if(count($models) <= 0)

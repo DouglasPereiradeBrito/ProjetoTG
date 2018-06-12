@@ -139,39 +139,39 @@
                 <tbody>
                   @foreach($models as $model)
                     <tr>
-                      <td>{{ $model->id }}</td>
-                      <td {{ isset($model->description) ? '' : 'hidden' }}>{{ $model->description }}</td>
+                      <td style="vertical-align: middle;">{{ $model->id }}</td>
+                      <td style="vertical-align: middle;" {{ isset($model->description) ? '' : 'hidden' }}>{{ $model->description }}</td>
                       @if(isset($model->brand, $model->session, $model->category, $model->gondola, $model->price))
-                        <td>{{ $model->brand->description }}</td>
-                        <td>{{ $model->session->description }}</td>
-                        <td>{{ $model->category->description }}</td>
-                        <td>{{ $model->gondola->description }}</td>
-                        <td>R$ {{ $model->price }}</td>
+                        <td style="vertical-align: middle;">{{ $model->brand->description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->session->description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->category->description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->gondola->description }}</td>
+                        <td style="vertical-align: middle;">R$ {{ $model->price }}</td>
                       @elseif($title === 'Histórico')
-                        <td>{{ $model->user->name }}</td>
-                        <td>{{ $model->product_before_description }}</td>
-                        <td>{{ $model->product_after_description }}</td>
-                        <td>R$ {{ $model->product_before_price }}</td>
-                        <td>R$ {{ $model->product_after_price }}</td>
-                        <td>{{ $model->brand_before_description }}</td>
-                        <td>{{ $model->brand_after_description }}</td>
-                        <td>{{ $model->gondola_before_description }}</td>
-                        <td>{{ $model->gondola_after_description }}</td>
-                        <td>{{ $model->category_before_description  }}</td>
-                        <td>{{ $model->category_after_description }}</td>
-                        <td>{{ $model->session_before_description }}</td>
-                        <td>{{ $model->session_after_description }}</td> 
+                        <td style="vertical-align: middle;">{{ $model->user->name }}</td>
+                        <td style="vertical-align: middle;">{{ $model->product_before_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->product_after_description }}</td>
+                        <td style="vertical-align: middle;">R$ {{ $model->product_before_price }}</td>
+                        <td style="vertical-align: middle;">R$ {{ $model->product_after_price }}</td>
+                        <td style="vertical-align: middle;">{{ $model->brand_before_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->brand_after_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->gondola_before_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->gondola_after_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->category_before_description  }}</td>
+                        <td style="vertical-align: middle;">{{ $model->category_after_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->session_before_description }}</td>
+                        <td style="vertical-align: middle;">{{ $model->session_after_description }}</td> 
                       @elseif($route === 'usuario')
-                        <td>{{ $model->name }}</td>
-                        <td>{{ $model->cpf }}</td>
-                        <td>{{ $model->fone }}</td>
-                        <td>{{ $model->email }}</td>
+                        <td style="vertical-align: middle;">{{ $model->name }}</td>
+                        <td style="vertical-align: middle;">{{ $model->cpf }}</td>
+                        <td style="vertical-align: middle;">{{ $model->fone }}</td>
+                        <td style="vertical-align: middle;">{{ $model->email }}</td>
                       @endif
-                      <td>{{ $model->created_at }}</td>
+                      <td style="vertical-align: middle;">{{ date_format($model->created_at, 'd/m/Y') }}</td>
                       @if($title !== 'Histórico')
-                        <td>{{ $model->updated_at }}</td>
+                        <td style="vertical-align: middle;">{{ date_format($model->updated_at, 'd/m/Y') }}</td>
                         @can('SCA')
-                          <td>
+                          <td style="vertical-align: middle;">
                             <a href='{{ route($route.'.show', $model->id) }}' class="btn btn-app bg-teal">
                               <i class="glyphicon glyphicon-eye-open"></i> Visualizar
                             </a>
@@ -193,33 +193,35 @@
       </div> 
     </div>    
     
-    
-    <div class="modal modal-danger fade" id="modal-libera" style="display: none;">
-      <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span></button>
-            <h4 class="modal-title text-center">Liberar Mudanças de Produtos</h4>
-          </div>
-          @if(isset($status) && $status == 0)
-            <div class="modal-body">
-              <b><p class="text-center">Tem certeza de Liberar acesso para Mudança dos Produtos</p></b>
+    @if($route == 'produto')
+      @can('SCA')
+        <div class="modal modal-danger fade" id="modal-libera" style="display: none;">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                  <h4 class="modal-title text-center">Liberar Mudanças de Produtos</h4>
+                </div>
+                @if(isset($status) && $status == 0)
+                  <div class="modal-body">
+                    <b><p class="text-center">Tem certeza de Liberar acesso para Mudança dos Produtos</p></b>
+                  </div>
+                @else
+                  <div class="modal-body">
+                    <b><p class="text-center">Tem certeza de Fechar acesso para Mudança dos Produtos</p></b>
+                  </div>
+                @endif
+                <div class="modal-footer">
+                  @if(isset($status) && $status == 0)
+                    <a href="{{ route('produto.liberar') }}" class="btn btn-outline">Liberar</a>
+                  @else
+                    <a href="{{ route('produto.fechar') }}" class="btn btn-outline">Fechar</a>
+                  @endif
+                </div>
             </div>
-          @else
-            <div class="modal-body">
-              <b><p class="text-center">Tem certeza de Fechar acesso para Mudança dos Produtos</p></b>
             </div>
-          @endif
-          <div class="modal-footer">
-            @if(isset($status) && $status == 0)
-              <a href="{{ route('produto.liberar') }}" class="btn btn-outline">Liberar</a>
-            @else
-              <a href="{{ route('produto.fechar') }}" class="btn btn-outline">Fechar</a>
-            @endif
-          </div>
-      </div>
-      </div>
-  </div>
-
+        </div>
+      @endcan
+    @endif
 @stop

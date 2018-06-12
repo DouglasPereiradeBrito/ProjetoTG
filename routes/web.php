@@ -28,9 +28,7 @@ Route::middleware(['auth'])->group(function() {
             return $id;
         })->name('marca.delete');
 
-        Route::get('pesquisa/{nome?}', 'BrandController@search', function($nome){
-            return $nome;
-        })->name('marca.search');
+        Route::get('pesquisa', 'BrandController@search')->name('marca.search');
     });
 });
 
@@ -45,9 +43,7 @@ Route::middleware(['auth'])->group(function(){
         Route::post('alterar/{id?}', 'CategoryController@edit', function($id){
             return $id;
         })->name('categoria.edit');
-        Route::get('pesquisa/{nome?}', 'CategoryController@search', function($nome){
-            return $nome;
-        })->name('categoria.search');
+        Route::get('pesquisa', 'CategoryController@search')->name('categoria.search');
         Route::get('delete/{id}', 'CategoryController@delete', function($id){
             return $id;
         })->name('categoria.delete');
@@ -166,6 +162,9 @@ Route::middleware(['auth'])->group(function(){
         Route::get('visualizar/{id}', 'UserController@showCA', function($id){
             return $id;
         })->name('usuario.show');
+        Route::get('delete/{id}', 'UserController@delete', function($id){
+            return $id;
+        })->name('usuario.delete');
     });
 });
 Route::prefix('notification')->group(function(){

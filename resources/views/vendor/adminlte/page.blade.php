@@ -194,6 +194,10 @@
     <script src="{{ asset('vendor/adminlte/dist/js/app.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/request.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/jquery.inputmask.date.extensions.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/jquery.inputmask.extensions.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/jquery.inputmask.js') }}"></script>
+    
     @stack('js')
     @yield('js')
 @stop

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Session;
+use App\Http\Controllers\Search;
+use App\Model\Product;
 
 class SessionController extends Controller{
     
@@ -55,10 +57,13 @@ class SessionController extends Controller{
     }
 
     public function delete($id = null){
-        if(Session::destry($id))
-            return redirect()->route('sessao.list')->with('success', 'Sessão Deletada com Sucesso.');
-        else
-            return redirect()->back()->with('error', 'Erro ao Deletar Sessão.');
+        if(count(Product::where('session_id', $id)->get()) == 0){
+            if(Session::destry($id))
+                return redirect()->route('sessao.list')->with('success', 'Sessão Deletada com Sucesso.');
+            else
+                return redirect()->back()->with('error', 'Erro ao Deletar Sessão.');
+        }else
+            return redirect()->back()->with('excluir', 'Sessão Está Vinculada a um Produto.');
     }
 
     public function search(Request $request){
@@ -70,22 +75,7 @@ class SessionController extends Controller{
         if(is_Null($request->description) && is_Null($request->criado) && is_Null($request->atualizado))
             $models = Session::orderBy('id', 'asc')->paginate(5);
         
-        if(isset($request->description))
-            $model = Session::where('description', 'like', "%$request->description%");//orderBy('id', 'asc')->paginate(5);
-            
-        if(isset($request->criado)){
-            $created_at = explode(' - ', $request->criado);
-            if(isset($model))
-                $model->whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-            else
-                $model = Session::whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-        }if(isset($request->atualizado)){
-            $updated_at = explode(' - ', $request->atualizado);
-            if(isset($model))
-                $model->whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-            else
-                $model = Session::whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-        }
+        $model = Search::quest($request->description, $request->criado, $request->atualizado, Session::class);
 
         $models = is_Null($models) ? $model->orderBy('id', 'asc')->paginate(5) : $models;
 

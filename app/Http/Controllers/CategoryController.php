@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Category;
+use App\Http\Controllers\Search;
+use App\Model\Product;
 
 class CategoryController extends Controller{
 
@@ -32,7 +34,6 @@ class CategoryController extends Controller{
         $models = Category::orderBy('id', 'asc')->paginate(5);
 
         return view('defaultList', compact(['models', 'route', 'tables', 'title']));
-        //return response()->json($models);
     }
 
     public function create(Request $request){
@@ -58,10 +59,13 @@ class CategoryController extends Controller{
     public function delete($id){
         $this->categories = Category::find($id);
 
-        if($this->categories->delete())
-            return redirect()->route('categoria.list')->with('success', 'Categoria Excluida com Sucesso.');
-        else
-            return redirect()->back('categoria.show', $id)->with('error', 'Erro ao Excluir Categoria.');
+        if(count(Product::where('category_id', $this->categories->id)->get()) == 0){
+            if($this->categories->delete())
+                return redirect()->route('categoria.list')->with('success', 'Categoria Excluida com Sucesso.');
+            else
+                return redirect()->back('categoria.show', $id)->with('error', 'Erro ao Excluir Categoria.');
+        }else
+            return redirect()->back()->with('excluir', 'Categoria Está Vinculada a  um Produto.');
     }
 
     public function search(Request $request){
@@ -73,22 +77,7 @@ class CategoryController extends Controller{
         if(is_Null($request->description) && is_Null($request->criado) && is_Null($request->atualizado))
             $models = Category::orderBy('id', 'asc')->paginate(5);
         
-        if(isset($request->description))
-            $model = Category::where('description', 'like', "%$request->description%");//orderBy('id', 'asc')->paginate(5);
-            
-        if(isset($request->criado)){
-            $created_at = explode(' - ', $request->criado);
-            if(isset($model))
-                $model->whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-            else
-                $model = Category::whereDate('created_at','>=', $created_at[0])->whereDate('created_at','<=', $created_at[1]);
-        }if(isset($request->atualizado)){
-            $updated_at = explode(' - ', $request->atualizado);
-            if(isset($model))
-                $model->whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-            else
-                $model = Category::whereDate('updated_at','>=', $updated_at[0])->whereDate('updated_at','<=', $updated_at[1]);
-        }
+        $model = Search::quest($request->description, $request->criado, $request->atualizado, Category::class);
 
         $models = is_Null($models) ? $model->orderBy('id', 'asc')->paginate(5) : $models;
 

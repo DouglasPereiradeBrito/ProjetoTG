@@ -64,13 +64,13 @@ class TagController extends Controller{
                         'product_id'    => $productTag[0]->product_id
                     ]);   
                 }
+                $this->notification($produto);
                 return $this->showLcdProduct($webService);              
             }else{
                 if($productTag[0]->product_id == $webServiceProduct[0]->product_id){
                     return response()->json([$productTag[0]->product->description, $productTag[0]->product->price]);
                 }else{
                     $this->notification($produto);
-                    //return response()->json("Produto em local Indevido");
                     return $this->showLcdProduct($webService);
                 }
             }

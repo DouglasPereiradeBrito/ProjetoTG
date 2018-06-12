@@ -1,6 +1,8 @@
 
 @extends('adminlte::page')
 
+@section('title', 'PrateleiraDigital')
+
 @section('content_header')
     <h1>{{ $title }}</h1>
     @include('includes.breadcrumb')
@@ -16,7 +18,9 @@
     <div class="box {{isset($models->id) ? 'box-warning' : 'box-success'}}">
         <div class="box-body">
             <button type="submit" class="btn btn-app {{ isset($models->id) ? 'bg-orange' : 'bg-green' }}"><i class="{{ isset($models->id) ? 'glyphicon glyphicon-refresh' : 'fa fa-save' }}"></i> {{ isset($models->id) ? ' Alterar' : ' Cadastrar' }}</button>
-            <a href='{{ route("$route.delete", isset($models->id) ? $models->id : '') }}' class="btn btn-app bg-red {{ auth()->user()->can('SCA') && isset($models->id) ? '' : 'hidden' }}"><span class='glyphicon glyphicon-remove'></span> Excluir</a>
+            @if($route != 'usuario')
+                <a href='{{ route("$route.delete", isset($models->id) ? $models->id : '') }}' class="btn btn-app bg-red {{ auth()->user()->can('SCA') && isset($models->id) ? '' : 'hidden' }}"><span class='glyphicon glyphicon-remove'></span> Excluir</a>
+            @endif
         </div>
     </div>
     <div class="box">
@@ -34,8 +38,8 @@
             @else  
                 <div class="form-group {{ !isset($models->id) && $key == 'id' ? 'hidden' : '' }} has-feedback {{ $errors->has("$key") ? 'has-error' : '' }}">
                     <label for="{{ $key }}">{{ $form }}</label>
+                    <input type="{{ $key == 'password' ? 'password' : 'text' }}" name='{{ $key }}' class="form-control" id="{{ $key }}" {{ $key == 'id' && isset($models->id) ? 'readonly' : '' }} id="{{ $key }}"  value="{{ $models->$key or old("$key") }}"/>
                     
-                    <input type="{{ $key == 'password' ? 'password' : 'text' }}" name='{{ $key }}' class="form-control" id="{{ $key }}" {{ $key == 'id' && isset($models->id) ? 'readonly' : '' }}  value="{{ $key == 'password' ? old("$key") : isset($models) ? $models->$key : ''}}"/>
                     @if ($errors->has("$key"))
                         <span class="help-block">
                             <strong>{{ $errors->first("$key") }}</strong>
