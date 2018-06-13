@@ -39,21 +39,27 @@ class SessionController extends Controller{
     public function create(Request $request){
         $this->validate($request, $this->sessions->rules, $this->sessions->messages);
 
-        if(Session::create($request->all()))
-            return redirect()->route('sessao.list')->with('success', 'Sessão Cadastrada com Sucesso.');
-        else
-            return redirect()->back()->with('error', 'Erro ao Cadastrar Sessão.');
+        if(count(Session::where("description", $request->description)->get()) == 0){
+            if(Session::create($request->all()))
+                return redirect()->route('sessao.list')->with('success', 'Sessão Cadastrada com Sucesso.');
+            else
+                return redirect()->back()->with('error', 'Erro ao Cadastrar Sessão.');
+        }else{
+            return redirect()->back()->with('error', 'Sessão Já Cadastrada.');
+        }      
     }
 
     public function edit(Request $request){
-        $this->validate($request, $this->sessions->rules);
+        $this->validate($request, $this->sessions->rules, $this->sessions->messages);
 
-        $this->sessions = Session::find($request->id);
-
-        if($this->sessions->update($request->all()))
-            return redirect()->route('sessao.list')->with('success', 'Sessão Alterada com Sucesso.');
-        else
-            return redirect()->back()->with('error', 'Erro ao Alterar Sessão.'); 
+        if(count(Session::where("description", $request->description)->get()) == 0){
+            if(Sessions::where('id', $request->id)->update($request->all()))
+                return redirect()->route('sessao.list')->with('success', 'Sessão Alterada com Sucesso.');
+            else
+                return redirect()->back()->with('error', 'Erro ao Alterar Sessão.'); 
+        }else{
+            return redirect()->back()->with('error', 'Sessão Já Cadastrada.');
+        }
     }
 
     public function delete($id = null){

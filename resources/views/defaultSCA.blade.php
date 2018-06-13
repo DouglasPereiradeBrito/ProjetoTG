@@ -39,7 +39,6 @@
                 <div class="form-group {{ !isset($models->id) && $key == 'id' ? 'hidden' : '' }} has-feedback {{ $errors->has("$key") ? 'has-error' : '' }}">
                     <label for="{{ $key }}">{{ $form }}</label>
                     <input type="{{ $key == 'password' ? 'password' : 'text' }}" name='{{ $key }}' class="form-control" id="{{ $key }}" {{ $key == 'id' && isset($models->id) ? 'readonly' : '' }} id="{{ $key }}"  value="{{ $models->$key or old("$key") }}"/>
-                    
                     @if ($errors->has("$key"))
                         <span class="help-block">
                             <strong>{{ $errors->first("$key") }}</strong>

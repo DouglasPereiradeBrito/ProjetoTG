@@ -39,21 +39,27 @@ class CategoryController extends Controller{
     public function create(Request $request){
         $this->validate($request, $this->categories->rules);
 
-        if(Category::create($request->all()))
-            return redirect()->route('categoria.list')->with('success', "Categoria Cadastrada com Sucesso.");
-        else
-            return redirect()->back('categoria.register')->with('error', "Erro ao Cadastar Categoria.");
+        if(count(Category::where("description", $request->description)->get()) == 0){
+            if(Category::create($request->all()))
+                return redirect()->route('categoria.list')->with('success', "Categoria Cadastrada com Sucesso.");
+            else
+                return redirect()->back('categoria.register')->with('error', "Erro ao Cadastar Categoria.");
+        }else{
+            return redirect()->back()->with('error', 'Categoria Já Cadastrada.');
+        }
     }
 
     public function edit(Request $request){
         $this->validate($request, $this->categories->rules);
-        
-        $this->categories = Category::find($request->id);
 
-        if($this->categories->update($request->all()))
-            return redirect()->route('categoria.list')->with("success", 'Categoria Alterada com Sucesso.');
-        else
-            return redirect()->back('categoria.change')->with('error', 'Erro ao Alterar Categoria');
+        if(count(Category::where("description", $request->description)->get()) == 0){
+            if(Category::where('id', $request->id)->update($request->all()))
+                return redirect()->route('categoria.list')->with("success", 'Categoria Alterada com Sucesso.');
+            else
+                return redirect()->back('categoria.change')->with('error', 'Erro ao Alterar Categoria');
+        }else{
+            return redirect()->back()->with('error', 'Categoria Já Cadastrada.');
+        }
     }
 
     public function delete($id){

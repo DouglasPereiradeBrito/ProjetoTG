@@ -38,22 +38,28 @@ class BrandController extends Controller{
 
     public function edit(Request $request){
         $this->validate($request, $this->brand->rules, $this->brand->messages);
-
-        $brand = Brand::find($request->id);
-
-        if($brand->update($request->all()))
-            return redirect()->route('marca.list')->with('success', "Marca Alterada com Sucesso.");
-        else
-            return redirect()->back()->with('error', "Erro ao Alterar Marca.");
+        
+        if(count(Brand::where("description", $request->description)->get()) == 0){
+            if(Brand::where('id', $request->id)->update($request->all()))
+                return redirect()->route('marca.list')->with('success', "Marca Alterada com Sucesso.");
+            else
+                return redirect()->back()->with('error', "Erro ao Alterar Marca.");
+        }else{
+            return redirect()->back()->with('error', 'Marca Já Cadastrada.');
+        }
     }
 
     public function create(Request $request){;
         $this->validate($request, $this->brand->rules, $this->brand->messages);
-
-        if(Brand::create($request->all()))
-            return redirect()->route('marca.list')->with('success','Marca Cadastrar com Sucesso.');
-        else
-            return redirect()->back()->with('error', 'Erro ao Cadastrar Marca.');
+        
+        if(count(Brand::where("description", $request->description)->get()) == 0){
+            if(Brand::create($request->all()))
+                return redirect()->route('marca.list')->with('success','Marca Cadastrar com Sucesso.');
+            else
+                return redirect()->back()->with('error', 'Erro ao Cadastrar Marca.');
+        }else{
+            return redirect()->back()->with('error', 'Marca Já Cadastrada.');
+        }
     }
 
     public function delete($id){

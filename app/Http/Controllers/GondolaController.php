@@ -27,13 +27,16 @@ class GondolaController extends Controller{
     }
 
     public function create(Request $request){
+        $this->validate($request, $this->gondola->rules, $this->gondola->messages);
 
-        $this->validate($request, $this->gondola->rules);
-
-        if(Gondola::create($request->all()))
-            return redirect()->route('gondola.list')->with('success', 'Gôndola Cadastrada com Sucesso.');
-        else
-            return redirect()->back('gondola.create', $request->id)->with('error', 'Erro ao Cadastrar Gôndola.');
+        if(count(Gondola::where("description", $request->description)->get()) == 0){
+            if(Gondola::create($request->all()))
+                return redirect()->route('gondola.list')->with('success', 'Gôndola Cadastrada com Sucesso.');
+            else
+                return redirect()->back('gondola.create', $request->id)->with('error', 'Erro ao Cadastrar Gôndola.');
+        }else{
+            return redirect()->back()->with('error', 'Gôndola Já Cadastrada.');
+        }
     }
 
     public function showL(){
@@ -47,14 +50,16 @@ class GondolaController extends Controller{
     }
 
     public function edit(Request $request){
-        $this->validate($request, $this->gondola->rules);
+        $this->validate($request, $this->gondola->rules, $this->gondola->messages);
 
-        $this->gondola = Gondola::find($request->id);
-
-        if($this->gondola->update($request->all()))
-            return redirect()->route('gondola.list')->with('success', 'Gôndola Alterada com Sucesso.');
-        else
-            return redirect()->back('gondola.show', $request->id)->with('error', 'Erro ao Alterar Gôndola.');
+        if(count(Gondola::where("description", $request->description)->get()) == 0){
+            if(Gondola::where('id', $request->id)->update($request->all()))
+                return redirect()->route('gondola.list')->with('success', 'Gôndola Alterada com Sucesso.');
+            else
+                return redirect()->back('gondola.show', $request->id)->with('error', 'Erro ao Alterar Gôndola.');
+        }else{
+            return redirect()->back()->with('error', 'Gôndola Já Cadastrada.');
+        }
     }
 
     public function delete($id = null){
